@@ -58,3 +58,8 @@ $response = $kernel->handle(
 $response->send();
 
 $kernel->terminate($request, $response);
+
+//---
+if (PHP_SAPI === 'cli-server') {
+    Log::debug(sprintf('elapsed %.3f ms', (microtime(true) - LARAVEL_START) * 1000));
+}

@@ -13,7 +13,17 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        if (PHP_SAPI === 'cli-server') {
+            $monolog = \Log::getMonolog();
+            $monolog->pushHandler(new \Monolog\Handler\StreamHandler('php://stdout'));
+
+            $message = sprintf('access : %s %s', \Request::method(), \Request::getRequestUri());
+            \Log::debug($message, \Request::all());
+        }
+
+        \DB::listen(function ($query) {
+            \Log::info("Query {$query->time}ms [{$query->sql}]", $query->bindings);
+        });
     }
 
     /**
