@@ -19,11 +19,15 @@ class AppServiceProvider extends ServiceProvider
 
             $message = sprintf('access : %s %s', \Request::method(), \Request::getRequestUri());
             \Log::debug($message, \Request::all());
-        }
 
-        \DB::listen(function ($query) {
-            \Log::info("Query {$query->time}ms [{$query->sql}]", $query->bindings);
-        });
+            \DB::listen(function ($query) {
+                \Log::info("Query {$query->time}ms [{$query->sql}]", $query->bindings);
+            });
+
+            if (\DB::connection() instanceof \Illuminate\Database\SQLiteConnection) {
+                \DB::statement(\DB::raw('PRAGMA foreign_keys=1'));
+            }
+        }
     }
 
     /**
