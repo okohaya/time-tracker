@@ -28,6 +28,11 @@ class AppServiceProvider extends ServiceProvider
                 \DB::statement(\DB::raw('PRAGMA foreign_keys=1'));
             }
         }
+        if (\App::runningUnitTests()) {
+            // for testing.ERROR log
+            $monolog = \Log::getMonolog();
+            $monolog->pushHandler(new \Monolog\Handler\StreamHandler('php://stdout'));
+        }
     }
 
     /**
