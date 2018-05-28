@@ -31,4 +31,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Task::class);
     }
+
+    public function time_entries()
+    {
+        return $this->hasMany(TimeEntry::class);
+    }
 }
