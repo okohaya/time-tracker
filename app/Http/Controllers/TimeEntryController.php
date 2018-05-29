@@ -19,7 +19,7 @@ class TimeEntryController extends Controller
         $attributes = [
             'user_id' => Auth::id(),
             'task_id' => $request->input('task_id'),
-            'started_at' => Carbon::now()->toDateTimeString(),
+            'started_at' => Carbon::now(),
             'stopped_at' => null,
             'comment' => $request->input('comment', ''),
         ];
@@ -29,8 +29,14 @@ class TimeEntryController extends Controller
 
     public function update(Request $request, $id)
     {
+        $time = null;
+        if ($request->has('stopped_at')) {
+            $time = new Carbon($request->input('stopped_at'));
+        }
         $entry = Auth::user()->time_entries()->findOrFail($id);
-        $entry->update($request->all());
+        $entry->update([
+            'stopped_at' => $time,
+        ]);
         return response()->json($entry);
     }
 }
