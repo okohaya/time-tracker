@@ -1,9 +1,24 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { hot } from 'react-hot-loader'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import IndexPage from '../containers/IndexPage'
+
+function NotFound() {
+  return (
+    <div>
+      Not Found
+    </div>
+  )
+}
 
 function App() {
   return (
-    <div>hello world</div>
+    <Router>
+      <Switch>
+        <Route exact path="/" component={IndexPage} />
+        <Route component={NotFound} />
+      </Switch>
+    </Router>
   )
 }
 
