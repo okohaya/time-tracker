@@ -2,6 +2,7 @@ import { combineReducers } from 'redux'
 import {
   FETCH_TASKS_SUCCESS,
   ADD_TASK_SUCCESS,
+  START_TIMER_SUCCESS,
 } from '../actions'
 
 function byId(state = {}, action) {
@@ -10,15 +11,32 @@ function byId(state = {}, action) {
       return {
         ...state,
         ...action.tasks.reduce((obj, task) => {
-          obj[task.id] = task
+          const { timers, ...props } = task
+          obj[task.id] = {
+            ...props,
+            timer_ids: timers.map(timer => timer.id),
+          }
           return obj
         }, {})
       }
     case ADD_TASK_SUCCESS:
       return {
         ...state,
-        [action.task.id]: action.task,
+        [action.task.id]: {
+          ...action.task,
+          timer_ids: [],
+        },
       }
+    case START_TIMER_SUCCESS: {
+      const id = action.timer.task_id
+      return {
+        ...state,
+        [id]: {
+          ...state[id],
+          timer_ids: state[id].timer_ids.concat(action.timer.id)
+        }
+      }
+    }
     default:
       return state
   }

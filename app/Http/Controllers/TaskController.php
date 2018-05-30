@@ -10,7 +10,7 @@ class TaskController extends Controller
 {
     public function index()
     {
-        return Auth::user()->tasks()->latest()->get();
+        return Auth::user()->tasks()->with('timers')->latest()->get();
     }
 
     public function show($id)

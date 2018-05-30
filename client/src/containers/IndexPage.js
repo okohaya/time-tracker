@@ -14,7 +14,6 @@ class IndexPage extends Component {
 
   componentDidMount() {
     this.props.fetchTasks()
-    this.props.fetchTimers()
   }
 
   handleClick() {
@@ -38,11 +37,6 @@ class IndexPage extends Component {
         <h3>task list</h3>
         {tasks.map(task =>
           <Task task={task} onStartTimer={() => startTimer(task.id)} key={task.id} />
-        )}
-
-        <h3>timer list</h3>
-        {timers.map(timer =>
-          <Timer timer={timer} key={timer.id} />
         )}
       </div>
     )

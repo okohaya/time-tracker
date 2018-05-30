@@ -1,11 +1,13 @@
 import React from 'react'
+import { connect } from 'react-redux'
+import Timer from './Timer'
 
-function Task({ task, onStartTimer }) {
+function Task({ task, timers, onStartTimer }) {
   return (
     <div>
       <hr />
       <div>
-        id: {task.id}
+        task id: {task.id}
       </div>
       <div>
         {task.description}
@@ -13,8 +15,17 @@ function Task({ task, onStartTimer }) {
       <button onClick={onStartTimer}>
         start timer
       </button>
+      <div>
+        {timers.map(timer =>
+          <Timer timer={timer} key={timer.id} />
+        )}
+      </div>
     </div>
   )
 }
 
-export default Task
+const mapStateToProps = (state, ownProps) => ({
+  timers: ownProps.task.timer_ids.map(id => state.timers.byId[id])
+})
+
+export default connect(mapStateToProps)(Task)
