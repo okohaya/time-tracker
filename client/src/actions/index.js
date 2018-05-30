@@ -32,6 +32,14 @@ function fetchTimersSuccess(timers) {
   }
 }
 
+function fetchTimersFailure(error) {
+  return {
+    type: FETCH_TIMERS_FAILURE,
+    error
+  }
+}
+
+
 export function fetchTimers() {
   return dispatch => {
     dispatch(fetchTimersRequest())
@@ -40,8 +48,17 @@ export function fetchTimers() {
         'accept': 'application/json',
       },
       credentials: 'same-origin',
-    }).then(response => response.json())
-      .then(json => dispatch(fetchTimersSuccess(json)))
+    }).then(response =>
+      response.json().then(json => {
+        if (response.ok) {
+          return json
+        }
+        return Promise.reject(json)
+      })
+    ).then(
+      json => dispatch(fetchTimersSuccess(json)),
+      json => dispatch(fetchTimersFailure(json))
+    )
   }
 }
 
@@ -60,6 +77,13 @@ function startTimerSuccess(timer) {
   }
 }
 
+function startTimerFailure(error) {
+  return {
+    type: START_TIMER_FAILURE,
+    error
+  }
+}
+
 export function startTimer(task_id) {
   return dispatch => {
     dispatch(startTimerRequest(task_id))
@@ -71,8 +95,17 @@ export function startTimer(task_id) {
         'content-type': 'application/json',
       },
       credentials: 'same-origin',
-    }).then(response => response.json())
-      .then(json => dispatch(startTimerSuccess(json)))
+    }).then(response =>
+      response.json().then(json => {
+        if (response.ok) {
+          return json
+        }
+        return Promise.resolve(json)
+      })
+    ).then(
+      json => dispatch(startTimerSuccess(json)),
+      json => dispatch(startTimerFailure(json))
+    )
   }
 }
 
@@ -90,6 +123,13 @@ function stopTimerSuccess(timer) {
   }
 }
 
+function stopTimerFailure(error) {
+  return {
+    type: STOP_TIMER_FAILURE,
+    error
+  }
+}
+
 export function stopTimer(id) {
   return dispatch => {
     dispatch(stopTimerRequest(id))
@@ -101,8 +141,17 @@ export function stopTimer(id) {
         'content-type': 'application/json',
       },
       credentials: 'same-origin',
-    }).then(response => response.json())
-      .then(json => dispatch(stopTimerSuccess(json)))
+    }).then(response =>
+      response.json().then(json => {
+        if (response.ok) {
+          return json
+        }
+        return Promise.reject(json)
+      })
+    ).then(
+      json => dispatch(stopTimerSuccess(json)),
+      json => dispatch(stopTimerFailure(json))
+    )
   }
 }
 
@@ -121,6 +170,13 @@ function addTaskSuccess(task) {
   }
 }
 
+function addTaskFailure(error) {
+  return {
+    type: ADD_TASK_FAILURE,
+    error
+  }
+}
+
 export function addTask(description) {
   return dispatch => {
     dispatch(addTaskRequest(description))
@@ -132,8 +188,17 @@ export function addTask(description) {
         'content-type': 'application/json',
       },
       credentials: 'same-origin',
-    }).then(response => response.json())
-      .then(json => dispatch(addTaskSuccess(json)))
+    }).then(response =>
+      response.json().then(json => {
+        if (response.ok) {
+          return json
+        }
+        return Promise.reject(json)
+      })
+    ).then(
+      json => dispatch(addTaskSuccess(json)),
+      json => dispatch(addTaskFailure(json))
+    )
   }
 }
 
@@ -151,6 +216,13 @@ function fetchTasksSuccess(tasks) {
   }
 }
 
+function fetchTasksFailure(error) {
+  return {
+    type: FETCH_TASKS_FAILURE,
+    error
+  }
+}
+
 export function fetchTasks() {
   return dispatch => {
     dispatch(fetchTasksRequest())
@@ -159,7 +231,16 @@ export function fetchTasks() {
         'accept': 'application/json',
       },
       credentials: 'same-origin',
-    }).then(response => response.json())
-      .then(json => dispatch(fetchTasksSuccess(json)))
+    }).then(response =>
+      response.json().then(json => {
+        if (response.ok) {
+          return json
+        }
+        return Promise.reject(json)
+      })
+    ).then(
+      json => dispatch(fetchTasksSuccess(json)),
+      json => dispatch(fetchTasksFailure(json))
+    )
   }
 }
