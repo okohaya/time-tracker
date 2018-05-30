@@ -10,6 +10,15 @@ export const STOP_TIMER_REQUEST = 'STOP_TIMER_REQUEST'
 export const STOP_TIMER_FAILURE = 'STOP_TIMER_FAILURE'
 export const STOP_TIMER_SUCCESS = 'STOP_TIMER_SUCCESS'
 
+export const ADD_TASK_REQUEST = 'ADD_TASK_REQUEST'
+export const ADD_TASK_FAILURE = 'ADD_TASK_FAILURE'
+export const ADD_TASK_SUCCESS = 'ADD_TASK_SUCCESS'
+
+export const FETCH_TASKS_REQUEST = 'FETCH_TASKS_REQUEST'
+export const FETCH_TASKS_FAILURE = 'FETCH_TASKS_FAILURE'
+export const FETCH_TASKS_SUCCESS = 'FETCH_TASKS_SUCCESS'
+
+
 function fetchTimersRequest() {
   return {
     type: FETCH_TIMERS_REQUEST
@@ -37,10 +46,10 @@ export function fetchTimers() {
 }
 
 
-function startTimerRequest(comment) {
+function startTimerRequest(task_id) {
   return {
     type: START_TIMER_REQUEST,
-    comment
+    task_id
   }
 }
 
@@ -51,12 +60,12 @@ function startTimerSuccess(timer) {
   }
 }
 
-export function startTimer(comment) {
+export function startTimer(task_id) {
   return dispatch => {
-    dispatch(startTimerRequest(comment))
+    dispatch(startTimerRequest(task_id))
     return fetch(`/api/time_entries`, {
       method: 'POST',
-      body: JSON.stringify({ comment }),
+      body: JSON.stringify({ task_id }),
       headers: {
         'accept': 'application/json',
         'content-type': 'application/json',
@@ -94,5 +103,63 @@ export function stopTimer(id) {
       credentials: 'same-origin',
     }).then(response => response.json())
       .then(json => dispatch(stopTimerSuccess(json)))
+  }
+}
+
+
+function addTaskRequest(description) {
+  return {
+    type: ADD_TASK_REQUEST,
+    description
+  }
+}
+
+function addTaskSuccess(task) {
+  return {
+    type: ADD_TASK_SUCCESS,
+    task
+  }
+}
+
+export function addTask(description) {
+  return dispatch => {
+    dispatch(addTaskRequest(description))
+    return fetch(`/api/tasks`, {
+      method: 'POST',
+      body: JSON.stringify({ description }),
+      headers: {
+        'accept': 'application/json',
+        'content-type': 'application/json',
+      },
+      credentials: 'same-origin',
+    }).then(response => response.json())
+      .then(json => dispatch(addTaskSuccess(json)))
+  }
+}
+
+
+function fetchTasksRequest() {
+  return {
+    type: FETCH_TASKS_REQUEST
+  }
+}
+
+function fetchTasksSuccess(tasks) {
+  return {
+    type: FETCH_TASKS_SUCCESS,
+    tasks
+  }
+}
+
+export function fetchTasks() {
+  return dispatch => {
+    dispatch(fetchTasksRequest())
+    return fetch(`/api/tasks`, {
+      headers: {
+        'accept': 'application/json',
+      },
+      credentials: 'same-origin',
+    }).then(response => response.json())
+      .then(json => dispatch(fetchTasksSuccess(json)))
   }
 }

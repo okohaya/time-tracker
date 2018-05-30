@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { fetchTimers, startTimer, stopTimer } from '../actions'
-import { getAllTimers } from '../reducers'
-import Timer from '../components/Timer'
+import { fetchTimers, startTimer, addTask, fetchTasks } from '../actions'
+import { getAllTimers } from '../reducers/timers'
+import { getAllTasks } from '../reducers/tasks'
+import Timer from './Timer'
+import Task from './Task'
 
 class IndexPage extends Component {
   constructor(props) {
@@ -11,27 +13,36 @@ class IndexPage extends Component {
   }
 
   componentDidMount() {
+    this.props.fetchTasks()
     this.props.fetchTimers()
   }
 
   handleClick() {
-    this.props.startTimer(this.input.value)
+    this.props.addTask(this.input.value)
   }
 
   render() {
-    const { timers, stopTimer } = this.props
+    const { timers, tasks, startTimer } = this.props
     return (
       <div>
         <h1>time tracker</h1>
+
         <div>
-          <div>new time entry</div>
+          <div>new task</div>
           <input ref={input => this.input = input} />
           <button onClick={this.handleClick}>
-            start
+            add task
           </button>
         </div>
+
+        <h3>task list</h3>
+        {tasks.map(task =>
+          <Task task={task} onStartTimer={() => startTimer(task.id)} key={task.id} />
+        )}
+
+        <h3>timer list</h3>
         {timers.map(timer =>
-          <Timer timer={timer} stopTimer={stopTimer} key={timer.id} />
+          <Timer timer={timer} key={timer.id} />
         )}
       </div>
     )
@@ -40,11 +51,12 @@ class IndexPage extends Component {
 
 const mapStateToProps = state => {
   return {
-    timers: getAllTimers(state.timers)
+    timers: getAllTimers(state.timers),
+    tasks: getAllTasks(state.tasks),
   }
 }
 
 export default connect(
   mapStateToProps,
-  { fetchTimers, startTimer, stopTimer }
+  { fetchTimers, startTimer, addTask, fetchTasks }
 )(IndexPage)
