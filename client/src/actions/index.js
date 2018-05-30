@@ -43,7 +43,7 @@ function fetchTimersFailure(error) {
 export function fetchTimers() {
   return dispatch => {
     dispatch(fetchTimersRequest())
-    return fetch(`/api/time_entries`, {
+    return fetch(`/api/timers`, {
       headers: {
         'accept': 'application/json',
       },
@@ -87,7 +87,7 @@ function startTimerFailure(error) {
 export function startTimer(task_id) {
   return dispatch => {
     dispatch(startTimerRequest(task_id))
-    return fetch(`/api/time_entries`, {
+    return fetch(`/api/timers`, {
       method: 'POST',
       body: JSON.stringify({ task_id }),
       headers: {
@@ -133,7 +133,7 @@ function stopTimerFailure(error) {
 export function stopTimer(id) {
   return dispatch => {
     dispatch(stopTimerRequest(id))
-    return fetch(`/api/time_entries/${id}`, {
+    return fetch(`/api/timers/${id}`, {
       method: 'PATCH',
       body: JSON.stringify({ stopped_at: new Date }),
       headers: {

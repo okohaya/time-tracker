@@ -4,12 +4,12 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use App\Models\Task;
-use App\Models\TimeEntry;
+use App\Models\Timer;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class TimeEntryTest extends TestCase
+class TimerTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -22,14 +22,14 @@ class TimeEntryTest extends TestCase
 
     function test_index()
     {
-        $this->json('GET', '/api/time_entries')
+        $this->json('GET', '/api/timers')
             ->assertStatus(200)
             ->assertExactJson([]);
 
-        $this->json('POST', '/api/time_entries', ['comment' => 'time1']);
-        $this->json('POST', '/api/time_entries', ['comment' => 'time2']);
+        $this->json('POST', '/api/timers', ['comment' => 'time1']);
+        $this->json('POST', '/api/timers', ['comment' => 'time2']);
 
-        $this->json('GET', '/api/time_entries')
+        $this->json('GET', '/api/timers')
             ->assertStatus(200)
             ->assertJson([
                 ['comment' => 'time2'],
@@ -39,14 +39,14 @@ class TimeEntryTest extends TestCase
 
     function test_store()
     {
-        $this->json('POST', '/api/time_entries')
+        $this->json('POST', '/api/timers')
             ->assertStatus(200);
-        $this->assertSame(1, TimeEntry::count());
+        $this->assertSame(1, Timer::count());
     }
 
     function test_update()
     {
-        TimeEntry::create([
+        Timer::create([
             'user_id' => 1,
             'task_id' => 3,
             'started_at' => '2001-01-01 00:00:00',
@@ -54,8 +54,8 @@ class TimeEntryTest extends TestCase
             'comment' => 'entry1',
         ]);
 
-        $this->json('PATCH', '/api/time_entries/1', ['stopped_at' => '2001-01-01 01:00:00'])
+        $this->json('PATCH', '/api/timers/1', ['stopped_at' => '2001-01-01 01:00:00'])
             ->assertStatus(200)
-            ->assertJson(['stopped_at' => '2001-01-01 01:00:00']);
+            ->assertJson(['stopped_at' => '2001-01-01T01:00:00Z']);
     }
 }

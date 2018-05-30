@@ -19,8 +19,8 @@ class Task extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function time_entries()
+    public function timers()
     {
-        return $this->hasMany(TimeEntry::class);
+        return $this->hasMany(Timer::class);
     }
 }

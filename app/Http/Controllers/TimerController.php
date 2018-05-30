@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\TimeEntry;
+use App\Models\Timer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class TimeEntryController extends Controller
+class TimerController extends Controller
 {
     public function index()
     {
-        return Auth::user()->time_entries()->latest('id')->get();
+        return Auth::user()->timers()->latest('id')->get();
     }
 
-    public function store(TimeEntry $entry, Request $request)
+    public function store(Timer $timer, Request $request)
     {
         $attributes = [
             'user_id' => Auth::id(),
@@ -23,8 +23,8 @@ class TimeEntryController extends Controller
             'stopped_at' => null,
             'comment' => $request->input('comment', ''),
         ];
-        $entry->fill($attributes)->save();
-        return response()->json($entry);
+        $timer->fill($attributes)->save();
+        return response()->json($timer);
     }
 
     public function update(Request $request, $id)
@@ -33,10 +33,10 @@ class TimeEntryController extends Controller
         if ($request->has('stopped_at')) {
             $time = new Carbon($request->input('stopped_at'));
         }
-        $entry = Auth::user()->time_entries()->findOrFail($id);
-        $entry->update([
+        $timer = Auth::user()->timers()->findOrFail($id);
+        $timer->update([
             'stopped_at' => $time,
         ]);
-        return response()->json($entry);
+        return response()->json($timer);
     }
 }
