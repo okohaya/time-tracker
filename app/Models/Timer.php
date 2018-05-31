@@ -8,6 +8,7 @@ class Timer extends Model
 {
     protected $fillable = ['user_id', 'task_id', 'started_at', 'stopped_at', 'comment'];
     protected $dates = ['started_at', 'stopped_at'];
+    protected $hidden = ['user_id'];
 
     protected $casts = [
         'user_id' => 'integer',
