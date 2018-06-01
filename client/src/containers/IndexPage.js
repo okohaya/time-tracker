@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import styled from 'react-emotion'
-import { fetchTimers, startTimer, addTask, fetchTasks } from '../actions'
+import { fetchTimers, startTimer, addTask, addTaskAndStartTimer, fetchTasks } from '../actions'
 import { getAllTimers } from '../reducers/timers'
 import { getAllTasks } from '../reducers/tasks'
 import Timer from './Timer'
@@ -14,11 +14,12 @@ class IndexPage extends Component {
   }
 
   componentDidMount() {
-    this.props.fetchTasks()
+    //this.props.fetchTasks()
+    this.props.fetchTimers()
   }
 
   handleClick() {
-    this.props.addTask(this.input.value)
+    this.props.addTaskAndStartTimer(this.input.value)
   }
 
   render() {
@@ -36,11 +37,11 @@ class IndexPage extends Component {
         </div>
 
         <h3>task list</h3>
-        <Container>
-          {tasks.map(task =>
-            <Task task={task} onStartTimer={() => startTimer(task.id)} key={task.id} />
+        <div>
+          {timers.slice().reverse().map(timer =>
+            <Timer key={timer.id} timer={timer} />
           )}
-        </Container>
+        </div>
       </div>
     )
   }
@@ -55,7 +56,7 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { fetchTimers, startTimer, addTask, fetchTasks }
+  { fetchTimers, startTimer, addTask, addTaskAndStartTimer, fetchTasks }
 )(IndexPage)
 
 

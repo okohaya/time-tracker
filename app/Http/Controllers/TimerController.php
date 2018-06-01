@@ -11,7 +11,7 @@ class TimerController extends Controller
 {
     public function index()
     {
-        return Auth::user()->timers()->latest('id')->get();
+        return Auth::user()->timers()->with('task:id,description')->latest('id')->get();
     }
 
     public function store(Timer $timer, Request $request)
@@ -24,7 +24,7 @@ class TimerController extends Controller
             'comment' => $request->input('comment', ''),
         ];
         $timer->fill($attributes)->save();
-        return response()->json($timer);
+        return response()->json($timer->fresh('task:id,description'));
     }
 
     public function update(Request $request, $id)
@@ -33,7 +33,7 @@ class TimerController extends Controller
         if ($request->has('stopped_at')) {
             $time = new Carbon($request->input('stopped_at'));
         }
-        $timer = Auth::user()->timers()->findOrFail($id);
+        $timer = Auth::user()->timers()->with('task:id,description')->findOrFail($id);
         $timer->update([
             'stopped_at' => $time,
         ]);

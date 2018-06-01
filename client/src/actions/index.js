@@ -202,6 +202,18 @@ export function addTask(description) {
   }
 }
 
+export function addTaskAndStartTimer(description) {
+  return dispatch => {
+    return dispatch(addTask(description)).then(action => {
+      console.log('debug startNewTask:', action)
+      if (action.error) {
+        return action
+      }
+      return dispatch(startTimer(action.task.id))
+    })
+  }
+}
+
 
 function fetchTasksRequest() {
   return {
