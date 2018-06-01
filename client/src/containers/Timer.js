@@ -1,9 +1,23 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import styled from 'react-emotion'
 import { stopTimer } from '../actions'
 
-function to_local(time) {
-  return time ? (new Date(time)).toLocaleString() : "running"
+const padding = x => ('00' + x).slice(-2)
+
+function to_local(time_str) {
+  if (!time_str) {
+    return null
+  }
+  const date = new Date(time_str)
+  const mon = date.getMonth() + 1
+  const day = date.getDate()
+  const hour = date.getHours()
+  const min = date.getMinutes()
+
+  return [mon, day].map(padding).join('/')
+    + ' '
+    + [hour, min].map(padding).join(':')
 }
 
 function elapsed(timer) {
@@ -14,27 +28,23 @@ function elapsed(timer) {
   const min = Math.floor(diff / 60 % 60)
   const hour = Math.floor(diff / 60 / 60)
 
-  const padding = x => ('00' + x).slice(-2)
-  return [hour, min, sec].map(padding).join(':')
+  return hour + 'h' + padding(min) + 'm'
 }
 
 function Timer({ timer, task, stopTimer }) {
   const is_running = !timer.stopped_at
   return (
-    <div>
-      <hr />
+    <Container active={is_running}>
       <div>
-        <div>comment: {timer.comment}</div>
-        <div>started_at: {to_local(timer.started_at)}</div>
-        <div>stopped_at: {to_local(timer.stopped_at)}</div>
-        <div>elapsed: {elapsed(timer)}</div>
+        {to_local(timer.started_at)} ({elapsed(timer)})
+        {' '}
         {is_running &&
           <button onClick={() => stopTimer(timer.id)}>
             stop
           </button>
         }
       </div>
-    </div>
+    </Container>
   )
 }
 
@@ -46,3 +56,9 @@ export default connect(
   mapStateToProps,
   { stopTimer }
 )(Timer)
+
+
+const Container = styled('div')`
+  background: ${props =>
+    props.active ? 'red' : '#ccc'};
+`

@@ -7,7 +7,7 @@ module.exports = {
   },
   output: {
     filename: 'js/[name].js?id=[hash]',
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, '../public'),
     publicPath: '/',
   },
   resolve: {
@@ -17,7 +17,7 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      //template: 'src/template/index.html',
+      template: 'src/index.html',
     })
   ],
   module: {
@@ -37,7 +37,7 @@ module.exports = {
     host: '0.0.0.0',
     port: 8001,
     disableHostCheck: true,
-    contentBase: './dist',
+    contentBase: '../public',
     historyApiFallback: true,
     proxy: {
       '/api': 'http://localhost:8000',

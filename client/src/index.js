@@ -23,9 +23,7 @@ if (module.hot) {
   })
 }
 
-const root = document.createElement('div')
-root.id = 'root'
-document.body.appendChild(root)
+const root = document.getElementById('root')
 
 ReactDOM.render(
   <Provider store={store}>

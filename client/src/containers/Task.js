@@ -1,26 +1,24 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import styled from 'react-emotion'
 import Timer from './Timer'
 
 function Task({ task, timers, onStartTimer }) {
   return (
-    <div>
-      <hr />
-      <div>
-        task id: {task.id}
-      </div>
-      <div>
+    <Card>
+      <Container>
         {task.description}
-      </div>
-      <button onClick={onStartTimer}>
-        start timer
-      </button>
+        <Flex />
+        <button onClick={onStartTimer}>
+          start timer
+        </button>
+      </Container>
       <div>
         {timers.map(timer =>
           <Timer timer={timer} key={timer.id} />
         )}
       </div>
-    </div>
+    </Card>
   )
 }
 
@@ -29,3 +27,20 @@ const mapStateToProps = (state, ownProps) => ({
 })
 
 export default connect(mapStateToProps)(Task)
+
+
+const Card = styled('div')`
+  border: 1px solid #aaa;
+  width: 210px;
+  height: 300px;
+  margin-right: 20px;
+  margin-bottom: 20px;
+`
+
+const Container = styled('div')`
+  display: flex;
+`
+
+const Flex = styled('div')`
+  flex: 1;
+`

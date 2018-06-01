@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import styled from 'react-emotion'
 import { fetchTimers, startTimer, addTask, fetchTasks } from '../actions'
 import { getAllTimers } from '../reducers/timers'
 import { getAllTasks } from '../reducers/tasks'
@@ -35,9 +36,11 @@ class IndexPage extends Component {
         </div>
 
         <h3>task list</h3>
-        {tasks.map(task =>
-          <Task task={task} onStartTimer={() => startTimer(task.id)} key={task.id} />
-        )}
+        <Container>
+          {tasks.map(task =>
+            <Task task={task} onStartTimer={() => startTimer(task.id)} key={task.id} />
+          )}
+        </Container>
       </div>
     )
   }
@@ -54,3 +57,9 @@ export default connect(
   mapStateToProps,
   { fetchTimers, startTimer, addTask, fetchTasks }
 )(IndexPage)
+
+
+const Container = styled('div')`
+  display: flex;
+  flex-wrap: wrap;
+`
