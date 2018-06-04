@@ -17,7 +17,7 @@ class CreateTimeEntriesTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('user_id')->index();
             $table->unsignedInteger('task_id')->nullable()->index();
-            $table->timestamp('started_at');
+            $table->timestamp('started_at')->nullable();
             $table->timestamp('stopped_at')->nullable();
             $table->string('comment');
             $table->timestamps();
