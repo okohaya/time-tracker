@@ -20,6 +20,7 @@ class IndexPage extends Component {
 
   handleClick() {
     this.props.addTaskAndStartTimer(this.input.value)
+    this.input.value = '';
   }
 
   render() {
